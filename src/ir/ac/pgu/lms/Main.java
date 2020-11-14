@@ -1,7 +1,6 @@
 package ir.ac.pgu.lms;
 
 import ir.ac.pgu.lms.dataStructures.LinkedList;
-import ir.ac.pgu.lms.domain.NodeOneSided;
 
 public class Main {
 
@@ -19,10 +18,8 @@ public class Main {
         linkedList.insert(7);
         linkedList.insert(1);
 
+        linkedList.recurSelectionSort(linkedList.getHead());
         linkedList.printList();
-
-        //linkedList.recurSelectionSort(linkedList.getHead());
-
 
     }
 }
