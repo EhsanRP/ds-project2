@@ -1,6 +1,7 @@
 package ir.ac.pgu.lms.dataStructures;
 
 import ir.ac.pgu.lms.domain.NodeOneSided;
+import org.w3c.dom.Node;
 
 public class LinkedList {
 
@@ -21,7 +22,7 @@ public class LinkedList {
 
     public void insertFirst(int data) {
 
-        NodeOneSided newData = new NodeOneSided(data, head.getNext());
+        NodeOneSided newData = new NodeOneSided(data, head);
         head = newData;
 
         size++;
@@ -40,25 +41,42 @@ public class LinkedList {
         size++;
     }
 
-    public void insertLast(int data) {
+    public void insert(int data) {
 
         NodeOneSided newData = new NodeOneSided(data, null);
+        NodeOneSided ptr = head;
 
         if (isEmpty()) {
 
             head = newData;
             size++;
+            System.out.println(data);
             return;
+
+
         }
 
-        NodeOneSided temp = head;
-        while (temp.hasNext()) {
-            temp = temp.getNext();
+        if (newData.getData() == ptr.getData()) {
+            System.out.println(data);
+            insertAfter(data, head);
+
+        } else if (data < ptr.getData()){
+            insertFirst(data);
+            System.out.println(data);
         }
 
-        temp.setNext(newData);
+        else if(data > ptr.getData()) {
+            for (int i = 0; i < size; i++) {
 
-        size++;
+                if (data >= ptr.getData()) {
+                    System.out.println(data);
+                    insertAfter(data, ptr);
+                    break;
+                }
+
+                ptr = ptr.getNext();
+            }
+        }
     }
 
     public void deleteNode(NodeOneSided key) {
@@ -91,7 +109,7 @@ public class LinkedList {
 
     public void deleteFirst() {
 
-        if (head==null || isEmpty()){
+        if (head == null || isEmpty()) {
             System.out.println("List is empty");
             return;
         }
@@ -127,6 +145,61 @@ public class LinkedList {
         size--;
     }
 
+    public void swapNodes(NodeOneSided a, NodeOneSided b) {
+        int temp = a.getData();
+        a.setData(b.getData());
+        b.setData(temp);
+    }
+
+    public NodeOneSided recurSelectionSort(NodeOneSided head) {
+
+        if (!head.hasNext())
+            return head;
+
+        NodeOneSided min = head;
+
+        NodeOneSided beforeMin = null;
+        NodeOneSided ptr;
+
+        for (ptr = head; !ptr.hasNext(); ptr = ptr.getNext()) {
+
+            if (ptr.getNext().getData() < min.getData()) {
+                min = ptr.getNext();
+                beforeMin = ptr;
+            }
+        }
+
+        if (min != head)
+            head = swapNodes(head, head, min, beforeMin);
+
+        head.setNext(recurSelectionSort(head.getNext()));
+
+        return head;
+    }
+
+    public NodeOneSided swapNodes(NodeOneSided head_ref, NodeOneSided currX,
+                                  NodeOneSided currY, NodeOneSided prevY) {
+        head_ref = currY;
+
+        prevY.setNext(currX);
+
+        NodeOneSided temp = currY.getNext();
+        currY.setNext(currX.getNext());
+        currX.setNext(temp);
+        return head_ref;
+    }
+
+    public void printList() {
+        for (int i = 0; i < size; i++) {
+            System.out.print(head.getData() + "-->");
+            head = head.getNext();
+        }
+    }
+
+    public NodeOneSided getHead() {
+        return head;
+    }
+
     public boolean isEmpty() {
         return size == 0;
     }
@@ -134,4 +207,6 @@ public class LinkedList {
     public int getSize() {
         return size;
     }
+
+
 }
