@@ -2,19 +2,19 @@ package ir.ac.pgu.lms.dataStructures;
 
 import ir.ac.pgu.lms.domain.NodeOneSided;
 
-public class LinkedList {
+public class TwoSidedLinkedList {
 
     private final boolean AUTO_SORT;
     private int size;
     private NodeOneSided head;
 
-    public LinkedList(boolean AUTO_SORT, NodeOneSided head) {
+    public TwoSidedLinkedList(boolean AUTO_SORT, NodeOneSided head) {
         this.AUTO_SORT = AUTO_SORT;
         this.size = 0;
         this.head = head;
     }
 
-    public LinkedList(boolean AUTO_SORT) {
+    public TwoSidedLinkedList(boolean AUTO_SORT) {
         this.AUTO_SORT = AUTO_SORT;
         size = 0;
     }
@@ -43,12 +43,12 @@ public class LinkedList {
     public void insert(int data){
 
         if (AUTO_SORT)
-            Sortedinsert(data);
+            inser(data);
         else
             insertLast(data);
     }
 
-    private void Sortedinsert(int data) {
+    private void inser(int data) {
 
         NodeOneSided newData = new NodeOneSided(data, null);
         NodeOneSided ptr = head;
@@ -186,52 +186,43 @@ public class LinkedList {
         size--;
     }
 
-    public void insertRec(int data) {
+    public NodeOneSided swapNodes( NodeOneSided head_ref, NodeOneSided currX,
+                                   NodeOneSided currY, NodeOneSided prevY) {
+        head_ref = currY;
 
-        NodeOneSided newData = new NodeOneSided(data, null);
-        NodeOneSided ptr = head;
+        prevY.setNext(currX);
 
-        if (isEmpty()) {
-            head = newData;
-            size++;
-            return;
-        }
+        NodeOneSided temp = currY.getNext();
+        currY.setNext(currX.getNext());
+        currX.setNext(temp);
+        return head_ref;
+    }
 
-        if (newData.getData() == ptr.getData())
-            insertAfter(data, head);
+    public NodeOneSided recurSelectionSort( NodeOneSided head) {
+        if (head.getNext() == null)
+            return head;
 
-        else if (data < ptr.getData())
-            insertFirst(data);
+        NodeOneSided min = head;
 
+        NodeOneSided beforeMin = null;
+        NodeOneSided ptr;
 
-        else if (data > ptr.getData())
-            if (!ptr.hasNext())
-                insertAfter(data, ptr);
-            else {
-                ptr = inserRecHelper(data, ptr);
-                insertAfter(data, ptr);
+        for (ptr = head; ptr.getNext() != null; ptr = ptr.getNext())
+        {
+
+            if (ptr.getNext().getData() < min.getData())
+            {
+                min = ptr.getNext();
+                beforeMin = ptr;
             }
-    }
-
-    private NodeOneSided inserRecHelper(int data, NodeOneSided ptr) {
-        if (ptr.hasNext() && data >= ptr.getNext().getData()) {
-            return inserRecHelper(data, ptr.getNext());
-        }
-        return ptr;
-    }
-
-    public void sortRec(LinkedList linkedList){
-        LinkedList list = new LinkedList(false);
-
-        NodeOneSided ptr = linkedList.head;
-        for (int i = 0; i < linkedList.size; i++) {
-            list.insertRec(ptr.getData());
-            ptr = ptr.getNext();
         }
 
-        list.printList();
-        linkedList = list;
-        linkedList.printList();
+        if (min != head)
+            head = swapNodes(head, head, min, beforeMin);
+
+        head.setNext(recurSelectionSort(head.getNext()));
+
+        return head;
     }
 
     public NodeOneSided search(int key) {

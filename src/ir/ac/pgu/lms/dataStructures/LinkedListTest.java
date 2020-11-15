@@ -11,7 +11,7 @@ class LinkedListTest {
 
     @BeforeEach
     void setUp() {
-        linkedList = new LinkedList(false);
+        linkedList = new LinkedList(true);
 
         linkedList.insert(3);
         linkedList.insert(10);

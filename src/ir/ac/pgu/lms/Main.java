@@ -7,18 +7,17 @@ public class Main {
     public static void main(String[] args) {
         LinkedList linkedList = new LinkedList(false);
 
-        linkedList.insert(3);
-        linkedList.insert(10);
-        linkedList.insert(2);
-        linkedList.insert(5);
-        linkedList.insert(6);
-        linkedList.insert(4);
-        linkedList.insert(9);
-        linkedList.insert(8);
-        linkedList.insert(7);
-        linkedList.insert(1);
+        linkedList.insertRec(3);
+        linkedList.insertRec(10);
+        linkedList.insertRec(2);
+        linkedList.insertRec(5);
+        linkedList.insertRec(6);
+        linkedList.insertRec(4);
+        linkedList.insertRec(9);
+        linkedList.insertRec(8);
+        linkedList.insertRec(7);
+        linkedList.insertRec(1);
 
-        linkedList.recurSelectionSort(linkedList.getHead());
         linkedList.printList();
 
     }
