@@ -7,8 +7,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-       // LinkedList linkedList = Functions.singlySidedSeedData(30);
-       // linkedList.printList();
+       LinkedList linkedList = Functions.singlySidedSeedData(30);
+       linkedList.printList();
 
         TwoSidedLinkedList first = Functions.DoubleSidedSeedData(10);
         TwoSidedLinkedList second = Functions.DoubleSidedSeedData(10);
@@ -21,6 +21,11 @@ public class Main {
 
         System.out.println();
         finalList.printList();
+
+        TwoSidedLinkedList finalListRec = Functions.commonNodesRec(first,second);
+
+        System.out.println();
+        finalListRec.printList();
 
     }
 }
