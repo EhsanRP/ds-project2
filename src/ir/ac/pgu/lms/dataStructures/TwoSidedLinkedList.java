@@ -1,17 +1,18 @@
 package ir.ac.pgu.lms.dataStructures;
 
 import ir.ac.pgu.lms.domain.NodeOneSided;
+import ir.ac.pgu.lms.domain.NodeTwoSided;
 
 public class TwoSidedLinkedList {
 
     private final boolean AUTO_SORT;
     private int size;
-    private NodeOneSided head;
+    private NodeTwoSided head;
 
-    public TwoSidedLinkedList(boolean AUTO_SORT, NodeOneSided head) {
+    public TwoSidedLinkedList(boolean AUTO_SORT, int head) {
         this.AUTO_SORT = AUTO_SORT;
         this.size = 0;
-        this.head = head;
+        this.head = new NodeTwoSided(head);
     }
 
     public TwoSidedLinkedList(boolean AUTO_SORT) {
@@ -21,37 +22,41 @@ public class TwoSidedLinkedList {
 
     public void insertFirst(int data) {
 
-        NodeOneSided newData = new NodeOneSided(data, head);
+        NodeTwoSided newData = new NodeTwoSided(data);
+        newData.setNext(head);
+        head.setPrevious(newData);
         head = newData;
 
         size++;
     }
 
-    public void insertAfter(int data, NodeOneSided node) {
+    public void insertAfter(int data, NodeTwoSided node) {
 
         if (node == null) {
             System.out.println("Previous Node can not be null");
             return;
         }
 
-        NodeOneSided newData = new NodeOneSided(data, node.getNext());
+        NodeTwoSided newData = new NodeTwoSided(data);
+        newData.setPrevious(node);
+        newData.setNext(node.getNext());
         node.setNext(newData);
 
         size++;
     }
 
-    public void insert(int data){
+    public void insert(int data) {
 
         if (AUTO_SORT)
-            inser(data);
+            Sortedinsert(data);
         else
             insertLast(data);
     }
 
-    private void inser(int data) {
+    private void Sortedinsert(int data) {
 
-        NodeOneSided newData = new NodeOneSided(data, null);
-        NodeOneSided ptr = head;
+        NodeTwoSided newData = new NodeTwoSided(data);
+        NodeTwoSided ptr = head;
 
         if (isEmpty()) {
             head = newData;
@@ -70,32 +75,38 @@ public class TwoSidedLinkedList {
             if (!ptr.hasNext())
                 insertAfter(data, ptr);
             else {
-                while (data >= ptr.getNext().getData() && ptr.hasNext()) {
+                while (ptr.hasNext() && data >= ptr.getNext().getData()) {
                     ptr = ptr.getNext();
                 }
                 insertAfter(data, ptr);
             }
     }
 
-    private void insertLast(int data){
+    private void insertLast(int data) {
 
-        if (isEmpty())
+        if (isEmpty()) {
             insertFirst(data);
+            return;
+        }
 
-        NodeOneSided newData = new NodeOneSided(data);
+        NodeTwoSided tail = getTail();
 
-        getTail().setNext(newData);
+        NodeTwoSided newData = new NodeTwoSided(data);
+
+        tail.setNext(newData);
+        newData.setPrevious(tail);
+
+        size++;
     }
 
-    public void deleteNode(NodeOneSided key) {
+    public void deleteNode(NodeTwoSided key) {
 
         if (isEmpty()) {
             System.out.println("List is Empty");
             return;
         }
 
-        NodeOneSided temp = head;
-        NodeOneSided previous = null;
+        NodeTwoSided temp = head;
 
         while (temp.hasNext()) {
             if (temp == key)
@@ -105,12 +116,11 @@ public class TwoSidedLinkedList {
                 System.out.println("Key Node Not found");
                 return;
             }
-
-            previous = temp;
             temp = temp.getNext();
         }
 
-        previous.setNext(temp.getNext());
+        temp.getPrevious().setNext(temp.getNext());
+        temp.getNext().setPrevious(temp.getPrevious());
 
         size--;
     }
@@ -122,7 +132,7 @@ public class TwoSidedLinkedList {
             return;
         }
 
-        NodeOneSided node = head;
+        NodeTwoSided node = head;
         head = head.getNext();
         head.setNext(node.getNext());
 
@@ -142,21 +152,19 @@ public class TwoSidedLinkedList {
         } else if (index == size - 1)
             deleteLast();
 
-        NodeOneSided previous = head;
-        NodeOneSided next = head.getNext();
-        NodeOneSided node;
+        NodeTwoSided ptr = head;
         int counter = 1;
 
         while (counter <= size - 1) {
 
             if (counter == index) {
-                previous.setNext(next.getNext());
+                ptr.setNext(ptr.getNext().getNext());
+                ptr.getNext().getNext().setPrevious(ptr);
                 size--;
                 return;
             }
 
-            previous = next;
-            next = next.getNext();
+            ptr = ptr.getNext();
             counter++;
         }
 
@@ -172,67 +180,71 @@ public class TwoSidedLinkedList {
             return;
         }
 
-        NodeOneSided previous = null;
-        NodeOneSided temp = head;
+        NodeTwoSided temp = head;
 
-        while (temp.hasNext()) {
-            previous = temp;
+        while (temp.hasNext())
             temp = temp.getNext();
-        }
 
-        previous.setNext(null);
+        temp.getPrevious().setNext(null);
         temp = null;
 
         size--;
     }
 
-    public NodeOneSided swapNodes( NodeOneSided head_ref, NodeOneSided currX,
-                                   NodeOneSided currY, NodeOneSided prevY) {
-        head_ref = currY;
+    public void insertRec(int data) {
 
-        prevY.setNext(currX);
+        NodeTwoSided newData = new NodeTwoSided(data);
+        NodeTwoSided ptr = head;
 
-        NodeOneSided temp = currY.getNext();
-        currY.setNext(currX.getNext());
-        currX.setNext(temp);
-        return head_ref;
-    }
-
-    public NodeOneSided recurSelectionSort( NodeOneSided head) {
-        if (head.getNext() == null)
-            return head;
-
-        NodeOneSided min = head;
-
-        NodeOneSided beforeMin = null;
-        NodeOneSided ptr;
-
-        for (ptr = head; ptr.getNext() != null; ptr = ptr.getNext())
-        {
-
-            if (ptr.getNext().getData() < min.getData())
-            {
-                min = ptr.getNext();
-                beforeMin = ptr;
-            }
+        if (isEmpty()) {
+            head = newData;
+            size++;
+            return;
         }
 
-        if (min != head)
-            head = swapNodes(head, head, min, beforeMin);
+        if (newData.getData() == ptr.getData())
+            insertAfter(data, head);
 
-        head.setNext(recurSelectionSort(head.getNext()));
+        else if (data < ptr.getData())
+            insertFirst(data);
 
-        return head;
+
+        else if (data > ptr.getData())
+            if (!ptr.hasNext())
+                insertAfter(data, ptr);
+            else {
+                ptr = insertRecHelper(data, ptr);
+                insertAfter(data, ptr);
+            }
     }
 
-    public NodeOneSided search(int key) {
+    private NodeTwoSided insertRecHelper(int data, NodeTwoSided ptr) {
+        if (data >= ptr.getData() && ptr.hasNext()) {
+            return insertRecHelper(data, ptr.getNext());
+        }
+        return ptr;
+    }
+
+    public static TwoSidedLinkedList sortRec(TwoSidedLinkedList linkedList) {
+        TwoSidedLinkedList sorted = new TwoSidedLinkedList(true);
+
+        NodeTwoSided ptr = linkedList.head;
+
+        while (ptr != null) {
+            sorted.insert(ptr.getData());
+            ptr = ptr.getNext();
+        }
+        return sorted;
+    }
+
+    public NodeTwoSided search(int key) {
 
         if (isEmpty()) {
             System.out.println("List is empty");
             return null;
         }
 
-        NodeOneSided ptr = head;
+        NodeTwoSided ptr = head;
 
         for (int i = 1; i < size; i++) {
             if (ptr.getData() == key)
@@ -250,7 +262,7 @@ public class TwoSidedLinkedList {
             return false;
         }
 
-        NodeOneSided ptr = head;
+        NodeTwoSided ptr = head;
 
         for (int i = 1; i < size; i++) {
             if (ptr.getData() == key)
@@ -262,15 +274,14 @@ public class TwoSidedLinkedList {
         return false;
     }
 
-    public NodeOneSided indexOf(int index) {
+    public NodeTwoSided indexOf(int index) {
 
         if (index > size) {
             System.out.println("Index out of bound");
             return null;
         }
 
-        NodeOneSided ptr = head;
-        NodeOneSided node;
+        NodeTwoSided ptr = head;
         int counter = 0;
 
         while (counter < size) {
@@ -285,28 +296,32 @@ public class TwoSidedLinkedList {
 
     public void printList() {
 
-        NodeOneSided ptr = head;
-        for (int i = 0; i < size; i++) {
-            System.out.print(ptr.getData() + "-->");
+        NodeTwoSided ptr = head;
+        while (ptr != null) {
+            System.out.print(ptr.getData() + " --> ");
             ptr = ptr.getNext();
         }
+
+        System.out.println();
     }
 
-    public NodeOneSided getHead() {
+    public NodeTwoSided getHead() {
         return head;
     }
 
-    public NodeOneSided getTail() {
+    public NodeTwoSided getTail() {
 
         if (isEmpty()) {
             System.out.println("List is empty");
             return null;
         }
 
-        NodeOneSided ptr = head;
-        for (int i = 1; i < size; i++) {
+        if (size == 1)
+            return head;
+
+        NodeTwoSided ptr = head;
+        while (ptr.hasNext())
             ptr = ptr.getNext();
-        }
         return ptr;
     }
 

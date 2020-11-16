@@ -1,24 +1,28 @@
 package ir.ac.pgu.lms;
 
 import ir.ac.pgu.lms.dataStructures.LinkedList;
+import ir.ac.pgu.lms.dataStructures.TwoSidedLinkedList;
 
 public class Main {
 
     public static void main(String[] args) {
-        LinkedList linkedList = new LinkedList(false);
 
-        linkedList.insertRec(3);
-        linkedList.insertRec(10);
-        linkedList.insertRec(2);
-        linkedList.insertRec(5);
-        linkedList.insertRec(6);
-        linkedList.insertRec(4);
-        linkedList.insertRec(9);
-        linkedList.insertRec(8);
-        linkedList.insertRec(7);
-        linkedList.insertRec(1);
-
+        LinkedList linkedList = Functions.singlySidedSeedData(30);
         linkedList.printList();
+
+
+
+        TwoSidedLinkedList first = Functions.DoubleSidedSeedData(10);
+        TwoSidedLinkedList second = Functions.DoubleSidedSeedData(10);
+
+        first.printList();
+        System.out.println();
+        second.printList();
+
+        TwoSidedLinkedList finalList = Functions.commonNodes(first,second);
+
+        System.out.println();
+        finalList.printList();
 
     }
 }

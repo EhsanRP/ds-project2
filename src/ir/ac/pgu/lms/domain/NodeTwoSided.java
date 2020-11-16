@@ -2,14 +2,8 @@ package ir.ac.pgu.lms.domain;
 
 public class NodeTwoSided {
     private int data;
-    private NodeOneSided next;
-    private NodeOneSided previous;
-
-    public NodeTwoSided(int data, NodeOneSided next, NodeOneSided previous) {
-        this.data = data;
-        this.next = next;
-        this.previous = previous;
-    }
+    private NodeTwoSided next;
+    private NodeTwoSided previous;
 
     public NodeTwoSided(int data) {
         this.data = data;
@@ -29,11 +23,19 @@ public class NodeTwoSided {
         this.data = data;
     }
 
-    public NodeOneSided getNext() {
+    public NodeTwoSided getNext() {
         return next;
     }
 
-    public void setNext(NodeOneSided next) {
+    public void setNext(NodeTwoSided next) {
         this.next = next;
+    }
+
+    public NodeTwoSided getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(NodeTwoSided previous) {
+        this.previous = previous;
     }
 }

@@ -8,10 +8,10 @@ public class LinkedList {
     private int size;
     private NodeOneSided head;
 
-    public LinkedList(boolean AUTO_SORT, NodeOneSided head) {
+    public LinkedList(boolean AUTO_SORT, int head) {
         this.AUTO_SORT = AUTO_SORT;
         this.size = 0;
-        this.head = head;
+        this.head = new NodeOneSided(head,null);
     }
 
     public LinkedList(boolean AUTO_SORT) {
@@ -70,7 +70,7 @@ public class LinkedList {
             if (!ptr.hasNext())
                 insertAfter(data, ptr);
             else {
-                while (data >= ptr.getNext().getData() && ptr.hasNext()) {
+                while (ptr.hasNext() && data >= ptr.getNext().getData()) {
                     ptr = ptr.getNext();
                 }
                 insertAfter(data, ptr);
@@ -79,12 +79,15 @@ public class LinkedList {
 
     private void insertLast(int data){
 
-        if (isEmpty())
+        if (isEmpty()) {
             insertFirst(data);
+            return;
+        }
 
         NodeOneSided newData = new NodeOneSided(data);
 
         getTail().setNext(newData);
+        size++;
     }
 
     public void deleteNode(NodeOneSided key) {
@@ -208,30 +211,28 @@ public class LinkedList {
             if (!ptr.hasNext())
                 insertAfter(data, ptr);
             else {
-                ptr = inserRecHelper(data, ptr);
+                ptr = insertRecHelper(data, ptr);
                 insertAfter(data, ptr);
             }
     }
 
-    private NodeOneSided inserRecHelper(int data, NodeOneSided ptr) {
-        if (ptr.hasNext() && data >= ptr.getNext().getData()) {
-            return inserRecHelper(data, ptr.getNext());
+    private NodeOneSided insertRecHelper(int data, NodeOneSided ptr) {
+        if (data >= ptr.getData() && ptr.hasNext()) {
+            return insertRecHelper(data, ptr.getNext());
         }
         return ptr;
     }
 
-    public void sortRec(LinkedList linkedList){
-        LinkedList list = new LinkedList(false);
+    public static LinkedList sortRec(LinkedList linkedList){
+        LinkedList sorted = new LinkedList(true);
 
         NodeOneSided ptr = linkedList.head;
-        for (int i = 0; i < linkedList.size; i++) {
-            list.insertRec(ptr.getData());
+
+        while (ptr != null){
+            sorted.insert(ptr.getData());
             ptr = ptr.getNext();
         }
-
-        list.printList();
-        linkedList = list;
-        linkedList.printList();
+        return sorted;
     }
 
     public NodeOneSided search(int key) {
@@ -295,10 +296,12 @@ public class LinkedList {
     public void printList() {
 
         NodeOneSided ptr = head;
-        for (int i = 0; i < size; i++) {
-            System.out.print(ptr.getData() + "-->");
+        while (ptr != null) {
+            System.out.print(ptr.getData() + " --> ");
             ptr = ptr.getNext();
         }
+
+        System.out.println();
     }
 
     public NodeOneSided getHead() {
@@ -312,10 +315,12 @@ public class LinkedList {
             return null;
         }
 
+        if (size ==1)
+            return head;
+
         NodeOneSided ptr = head;
-        for (int i = 1; i < size; i++) {
+        while (ptr.hasNext())
             ptr = ptr.getNext();
-        }
         return ptr;
     }
 
