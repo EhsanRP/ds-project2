@@ -8,26 +8,26 @@ import java.util.Random;
 
 public class Functions {
 
-    public static LinkedList singlySidedSeedData(int n) {
+    public static LinkedList singlySidedSeedData(int n, int bound) {
         LinkedList linkedList = new LinkedList(true);
 
 
         Random random = new Random();
 
         for (int i = 0; i < n; i++) {
-            linkedList.insert(random.nextInt(50));
+            linkedList.insert(random.nextInt(bound));
         }
 
         return linkedList;
     }
 
-    public static TwoSidedLinkedList DoubleSidedSeedData(int n) {
+    public static TwoSidedLinkedList DoubleSidedSeedData(int n, int bound) {
         TwoSidedLinkedList twoSidedLinkedList = new TwoSidedLinkedList(true);
 
         Random random = new Random();
 
         for (int i = 0; i < n; i++) {
-            twoSidedLinkedList.insert(random.nextInt(50));
+            twoSidedLinkedList.insert(random.nextInt(bound));
         }
 
         return twoSidedLinkedList;
