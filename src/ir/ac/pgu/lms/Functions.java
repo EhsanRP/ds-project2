@@ -38,7 +38,7 @@ public class Functions {
         TwoSidedLinkedList finalList = new TwoSidedLinkedList(true);
 
         NodeTwoSided firstPTR = first.getHead();
-        NodeTwoSided secondPTR = first.getHead();
+        NodeTwoSided secondPTR = second.getHead();
 
         if (first.getSize() == 0 || second.getSize() == 0) {
             System.out.println("One of lists are empty");
@@ -54,5 +54,36 @@ public class Functions {
             firstPTR = firstPTR.getNext();
         }
         return finalList;
+    }
+
+    public static TwoSidedLinkedList commonNodesRec(TwoSidedLinkedList first, TwoSidedLinkedList second) {
+
+        TwoSidedLinkedList finalList = new TwoSidedLinkedList(true);
+
+        NodeTwoSided firstPTR = first.getHead();
+        NodeTwoSided secondPTR = second.getHead();
+
+        if (first.getSize() == 0 || second.getSize() == 0) {
+            System.out.println("One of lists are empty");
+            return null;
+        }
+
+        commonNodesRecOuter(firstPTR, secondPTR, finalList);
+        return finalList;
+    }
+
+    public static void commonNodesRecOuter(NodeTwoSided firstPTR, NodeTwoSided secondPTR, TwoSidedLinkedList finalList) {
+        if (firstPTR != null) {
+            commonNodesRecInner(firstPTR, secondPTR, finalList);
+            commonNodesRecOuter(firstPTR.getNext(), secondPTR, finalList);
+        }
+    }
+
+    public static void commonNodesRecInner(NodeTwoSided firstPTR, NodeTwoSided secondPTR, TwoSidedLinkedList finalList) {
+        if (secondPTR != null) {
+            if (firstPTR.getData() == secondPTR.getData())
+                finalList.insert(firstPTR.getData());
+            commonNodesRecInner(firstPTR, secondPTR.getNext(), finalList);
+        }
     }
 }

@@ -1,9 +1,9 @@
 package ir.ac.pgu.lms.dataStructures;
 
 import ir.ac.pgu.lms.domain.NodeOneSided;
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class LinkedListTest {
 

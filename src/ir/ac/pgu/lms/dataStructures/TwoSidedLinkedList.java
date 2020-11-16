@@ -1,6 +1,5 @@
 package ir.ac.pgu.lms.dataStructures;
 
-import ir.ac.pgu.lms.domain.NodeOneSided;
 import ir.ac.pgu.lms.domain.NodeTwoSided;
 
 public class TwoSidedLinkedList {
